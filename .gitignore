@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+*.db
+*.db-shm
+*.db-wal
+service-account.json
+tts.log
+Skills/
+package-lock.json
