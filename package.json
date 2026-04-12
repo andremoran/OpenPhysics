@@ -2,7 +2,7 @@
   "name": "openphysics",
   "version": "1.0.0",
   "description": "AI Agent for Physics Research — Inspired by get-physics-done (PSI)",
-  "main": "index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "dev": "tsx src/index.ts",
