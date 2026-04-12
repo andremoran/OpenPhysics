@@ -9,6 +9,19 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 
+/**
+ * Detecta si la respuesta contiene una ruta de archivo para enviar.
+ * Formato: SEND_FILE:/path/to/file.pdf
+ * Retorna { text, filePath } separando el marcador del texto limpio.
+ */
+function extractFilePath(response: string): { text: string; filePath: string | null } {
+    const match = response.match(/SEND_FILE:([^\n]+)/);
+    if (!match) return { text: response, filePath: null };
+    const filePath = match[1].trim();
+    const text = response.replace(/SEND_FILE:[^\n]+\n?/, '').trim();
+    return { text, filePath };
+}
+
 export const bot = new Bot(env.TELEGRAM_BOT_TOKEN);
 
 /**
@@ -39,7 +52,8 @@ bot.command("start", async (ctx) => {
         "🔬 Constantes físicas (CODATA)\n" +
         "🧮 Evaluación de expresiones matemáticas\n" +
         "🔄 Conversión de unidades físicas\n" +
-        "🐺 Wolfram Alpha\n\n" +
+        "🐺 Wolfram Alpha\n" +
+        "📝 **Google Workspace (Docs/Drive)** para reportes y almacenamiento\n\n" +
         "**Comandos:**\n" +
         "`/clear` — Limpiar historial\n" +
         "`/login` — Conectar Google Workspace\n\n" +
@@ -86,14 +100,22 @@ bot.on("message:text", async (ctx) => {
 
     try {
         const answer = await runAgentLoop(userId, text);
+        const { text: cleanAnswer, filePath } = extractFilePath(answer);
 
-        if (answer.length > 4000) {
-            // Split long messages
-            for (let i = 0; i < answer.length; i += 4000) {
-                await ctx.reply(answer.slice(i, i + 4000));
+        // Enviar texto de respuesta
+        if (cleanAnswer.length > 4000) {
+            for (let i = 0; i < cleanAnswer.length; i += 4000) {
+                await ctx.reply(cleanAnswer.slice(i, i + 4000));
             }
-        } else {
-            await ctx.reply(answer);
+        } else if (cleanAnswer.trim()) {
+            await ctx.reply(cleanAnswer);
+        }
+
+        // Enviar archivo adjunto si existe
+        if (filePath && fs.existsSync(filePath)) {
+            await ctx.replyWithDocument(new InputFile(filePath, path.basename(filePath)));
+            // Limpiar archivo temporal después de enviar
+            try { fs.unlinkSync(filePath); } catch (_) {}
         }
 
     } catch (error: any) {

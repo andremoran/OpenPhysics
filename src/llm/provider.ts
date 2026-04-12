@@ -1,4 +1,5 @@
 import Groq from 'groq-sdk';
+import Anthropic from '@anthropic-ai/sdk';
 import { env } from '../config/env.ts';
 import fs from 'fs';
 import { toolsSchemas } from '../tools/index.ts';
@@ -35,10 +36,109 @@ if (groqClients.length === 0) {
 }
 console.log(`[LLM] Loaded ${groqClients.length} Groq API key(s).`);
 console.log(`[LLM] Loaded ${env.OPENROUTER_API_KEYS.length} OpenRouter API key(s).`);
+console.log(`[LLM] Anthropic configured: ${!!env.ANTHROPIC_API_KEY}`);
+
+// ═══════════════════════════════════════════
+// Anthropic Claude Client
+// ═══════════════════════════════════════════
+let anthropicClient: Anthropic | null = null;
+if (env.ANTHROPIC_API_KEY) {
+    anthropicClient = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+}
+
+/**
+ * Convierte mensajes del formato interno al formato Anthropic.
+ * Anthropic separa el system prompt de los mensajes de usuario.
+ */
+async function tryAnthropic(messages: LLMMessage[]): Promise<any> {
+    if (!anthropicClient) throw new Error('Anthropic not configured');
+
+    const systemMsg = messages.find(m => m.role === 'system');
+    const systemPrompt = systemMsg?.content || '';
+    const chatMessages = messages.filter(m => m.role !== 'system');
+
+    // Convertir tool_calls al formato Anthropic
+    const anthropicMessages: Anthropic.MessageParam[] = chatMessages.map(m => {
+        if (m.role === 'tool') {
+            return {
+                role: 'user' as const,
+                content: [{
+                    type: 'tool_result' as const,
+                    tool_use_id: m.tool_call_id || '',
+                    content: m.content || '',
+                }]
+            };
+        }
+        if (m.role === 'assistant' && m.tool_calls && m.tool_calls.length > 0) {
+            const content: any[] = [];
+            if (m.content) content.push({ type: 'text', text: m.content });
+            for (const tc of m.tool_calls) {
+                let inputObj: Record<string, unknown> = {};
+                try { inputObj = JSON.parse(tc.function.arguments || '{}'); } catch (_) {}
+                content.push({
+                    type: 'tool_use',
+                    id: tc.id,
+                    name: tc.function.name,
+                    input: inputObj,
+                });
+            }
+            return { role: 'assistant' as const, content };
+        }
+        return {
+            role: m.role as 'user' | 'assistant',
+            content: m.content || '',
+        };
+    });
+
+    // Convertir schemas de tools al formato Anthropic
+    const anthropicTools: Anthropic.Tool[] = toolsSchemas.map(schema => ({
+        name: schema.function.name,
+        description: schema.function.description,
+        input_schema: schema.function.parameters as Anthropic.Tool.InputSchema,
+    }));
+
+    const response = await anthropicClient.messages.create({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 4096,
+        system: systemPrompt,
+        messages: anthropicMessages,
+        tools: anthropicTools,
+    });
+
+    // Convertir respuesta Anthropic al formato interno (compatible con OpenAI)
+    const textContent = response.content
+        .filter(b => b.type === 'text')
+        .map(b => (b as Anthropic.TextBlock).text)
+        .join('');
+
+    const toolUseBlocks = response.content.filter(b => b.type === 'tool_use') as Anthropic.ToolUseBlock[];
+
+    if (toolUseBlocks.length > 0) {
+        return {
+            role: 'assistant',
+            content: textContent || null,
+            tool_calls: toolUseBlocks.map(b => ({
+                id: b.id,
+                type: 'function',
+                function: {
+                    name: b.name,
+                    arguments: JSON.stringify(b.input),
+                }
+            }))
+        };
+    }
+
+    return {
+        role: 'assistant',
+        content: textContent,
+        tool_calls: null,
+    };
+}
 
 // ═══════════════════════════════════════════
 // OpenRouter with key rotation
 // ═══════════════════════════════════════════
+
 async function tryOpenRouter(model: string, messages: LLMMessage[], apiKey: string): Promise<any> {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -74,17 +174,37 @@ async function tryOpenRouter(model: string, messages: LLMMessage[], apiKey: stri
  * OPTIMIZED CASCADE with multi-key rotation.
  * Physics-optimized model selection favoring reasoning models.
  */
+// Modelos gratuitos confiables en OpenRouter (ordenados por fiabilidad)
 const VERIFIED_FREE_MODELS = [
-    'arcee-ai/trinity-large-preview:free',
+    'google/gemma-3-27b-it:free',
     'meta-llama/llama-3.3-70b-instruct:free',
-    'qwen/qwen3-next-80b-a3b-instruct:free',
     'mistralai/mistral-small-3.1-24b-instruct:free',
-    'qwen/qwen3-coder:free',
+    'qwen/qwen3-14b:free',
+    'deepseek/deepseek-r1-0528:free',
 ];
 
 export async function chatCompletion(messages: LLMMessage[]): Promise<any> {
     const errors: string[] = [];
     const trimmed = trimMessages(messages);
+
+    // ── Step 0: Anthropic Claude (más confiable, si está configurado) ──
+    if (anthropicClient) {
+        const start = Date.now();
+        try {
+            console.log('[LLM] Trying Anthropic claude-haiku-4-5...');
+            const result = await tryAnthropic(trimmed);
+            const latency = Date.now() - start;
+            console.log(`[LLM] ✅ Anthropic succeeded (${latency}ms).`);
+            logModelAttempt('anthropic/claude-haiku-4-5', true, latency);
+            return result;
+        } catch (error: any) {
+            const latency = Date.now() - start;
+            const reason = error.message?.substring(0, 120) || 'Unknown';
+            console.error(`[LLM] ❌ Anthropic: ${reason}`);
+            errors.push(`Anthropic: ${reason}`);
+            logModelAttempt('anthropic/claude-haiku-4-5', false, latency, reason);
+        }
+    }
 
     // ── Step 1: Groq — try ALL API keys ──
     for (let i = 0; i < groqClients.length; i++) {
