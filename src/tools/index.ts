@@ -3,6 +3,7 @@ import { searchArxiv, searchArxivSchema, getArxivPaper, getArxivPaperSchema } fr
 import { getPhysicsConstant, getPhysicsConstantSchema, evaluateExpression, evaluateExpressionSchema, convertUnits, convertUnitsSchema } from './physicsTools.ts';
 import { queryWolfram, queryWolframSchema, queryWolframFull, queryWolframFullSchema } from './wolframTools.ts';
 import { getModelPerformance, getModelPerformanceSchema } from './monitoringTools.ts';
+import { createGoogleDoc, createGoogleDocSchema, searchGoogleDrive, searchGoogleDriveSchema } from './googleDocTools.ts';
 
 /**
  * Registry mapping tool names to their execution functions.
@@ -26,6 +27,10 @@ export const toolsRegistry: Record<string, (args: any, userId: number) => Promis
 
     // Monitoring
     get_model_stats: async (args: any) => getModelPerformance(args.days),
+
+    // Google Workspace
+    create_google_doc: createGoogleDoc,
+    search_google_drive: searchGoogleDrive,
 };
 
 /**
@@ -45,6 +50,9 @@ export const toolsSchemas: any[] = [
     queryWolframFullSchema,
     // Monitoring
     getModelPerformanceSchema,
+    // Google Workspace
+    createGoogleDocSchema,
+    searchGoogleDriveSchema,
 ];
 
 /**
