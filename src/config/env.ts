@@ -41,4 +41,5 @@ export const env = {
     GOOGLE_OAUTH_REDIRECT_URI: getEnv('GOOGLE_OAUTH_REDIRECT_URI', false, 'http://localhost:3000/oauth2callback'),
     GEMINI_API_KEY: getEnv('GEMINI_API_KEY', false, ''),
     WOLFRAM_APP_ID: getEnv('WOLFRAM_APP_ID', false, ''),
+    ANTHROPIC_API_KEY: getEnv('ANTHROPIC_API_KEY', false, ''),
 };
