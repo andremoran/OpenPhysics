@@ -2,7 +2,8 @@
  * Returns the current date and time in ISO format.
  */
 export async function getCurrentTime(): Promise<string> {
-    return new Date().toISOString();
+    const now = new Date();
+    return `ISO: ${now.toISOString()}\nFormatted: ${now.toLocaleString('es-ES', { timeZone: 'America/Lima' })} (America/Lima)\nLocal (Server): ${now.toLocaleString()}`;
 }
 
 export const getCurrentTimeSchema = {
