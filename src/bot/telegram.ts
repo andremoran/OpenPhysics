@@ -39,7 +39,8 @@ bot.command("start", async (ctx) => {
         "🔬 Constantes físicas (CODATA)\n" +
         "🧮 Evaluación de expresiones matemáticas\n" +
         "🔄 Conversión de unidades físicas\n" +
-        "🐺 Wolfram Alpha\n\n" +
+        "🐺 Wolfram Alpha\n" +
+        "📝 **Google Workspace (Docs/Drive)** para reportes y almacenamiento\n\n" +
         "**Comandos:**\n" +
         "`/clear` — Limpiar historial\n" +
         "`/login` — Conectar Google Workspace\n\n" +
