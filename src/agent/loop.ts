@@ -44,7 +44,7 @@ ${agentPersona}
 ---
 `.trim();
 
-const MAX_ITERATIONS = 5;
+const MAX_ITERATIONS = 20;
 
 /**
  * The main agent loop for a user message.
