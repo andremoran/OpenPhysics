@@ -26,7 +26,7 @@ const db = admin.firestore();
  */
 export async function saveGoogleToken(token: any): Promise<void> {
     try {
-        await db.collection('sysconfig').doc('google_oauth_physics').set({
+        await db.collection('sysconfig').doc('google_oauth').set({
             token,
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
         });
@@ -41,7 +41,7 @@ export async function saveGoogleToken(token: any): Promise<void> {
  */
 export async function getGoogleToken(): Promise<any | null> {
     try {
-        const doc = await db.collection('sysconfig').doc('google_oauth_physics').get();
+        const doc = await db.collection('sysconfig').doc('google_oauth').get();
         if (doc.exists) {
             return doc.data()?.token || null;
         }
