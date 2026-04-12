@@ -3,7 +3,34 @@ import { searchArxiv, searchArxivSchema, getArxivPaper, getArxivPaperSchema } fr
 import { getPhysicsConstant, getPhysicsConstantSchema, evaluateExpression, evaluateExpressionSchema, convertUnits, convertUnitsSchema } from './physicsTools.ts';
 import { queryWolfram, queryWolframSchema, queryWolframFull, queryWolframFullSchema } from './wolframTools.ts';
 import { getModelPerformance, getModelPerformanceSchema } from './monitoringTools.ts';
-import { createGoogleDoc, createGoogleDocSchema, searchGoogleDrive, searchGoogleDriveSchema } from './googleDocTools.ts';
+
+// Google Workspace Tools
+import { 
+    createGoogleDoc, createGoogleDocSchema, 
+    appendToGoogleDoc, appendToGoogleDocSchema
+} from './googleDocsTools.ts';
+
+import { 
+    searchDriveFiles, searchDriveFilesSchema,
+    readDriveFile, readDriveFileSchema,
+    uploadDriveFile, uploadDriveFileSchema,
+    createDriveFolder, createDriveFolderSchema,
+    shareDriveFile, shareDriveFileSchema,
+    copyDriveFile, copyDriveFileSchema
+} from './googleDriveTools.ts';
+
+import {
+    updateGoogleSheetValues, updateGoogleSheetValuesSchema,
+    getGoogleSheetValues, getGoogleSheetValuesSchema,
+    appendSheetRows, appendSheetRowsSchema,
+    createSpreadsheet, createSpreadsheetSchema
+} from './googleSheetsTools.ts';
+
+import {
+    listEmails, listEmailsSchema,
+    readEmail, readEmailSchema,
+    sendEmail, sendEmailSchema
+} from './gmailTools.ts';
 
 /**
  * Registry mapping tool names to their execution functions.
@@ -28,9 +55,28 @@ export const toolsRegistry: Record<string, (args: any, userId: number) => Promis
     // Monitoring
     get_model_stats: async (args: any) => getModelPerformance(args.days),
 
-    // Google Workspace
+    // Google Docs
     create_google_doc: createGoogleDoc,
-    search_google_drive: searchGoogleDrive,
+    append_to_google_doc: appendToGoogleDoc,
+
+    // Google Drive
+    search_drive_files: searchDriveFiles,
+    read_drive_file: readDriveFile,
+    upload_drive_file: uploadDriveFile,
+    create_drive_folder: createDriveFolder,
+    share_drive_file: shareDriveFile,
+    copy_drive_file: copyDriveFile,
+
+    // Google Sheets
+    update_google_sheet_values: updateGoogleSheetValues,
+    get_google_sheet_values: getGoogleSheetValues,
+    append_sheet_rows: appendSheetRows,
+    create_spreadsheet: createSpreadsheet,
+
+    // Gmail
+    list_emails: listEmails,
+    read_email: readEmail,
+    send_email: sendEmail,
 };
 
 /**
@@ -50,9 +96,23 @@ export const toolsSchemas: any[] = [
     queryWolframFullSchema,
     // Monitoring
     getModelPerformanceSchema,
+    
     // Google Workspace
     createGoogleDocSchema,
-    searchGoogleDriveSchema,
+    appendToGoogleDocSchema,
+    searchDriveFilesSchema,
+    readDriveFileSchema,
+    uploadDriveFileSchema,
+    createDriveFolderSchema,
+    shareDriveFileSchema,
+    copyDriveFileSchema,
+    updateGoogleSheetValuesSchema,
+    getGoogleSheetValuesSchema,
+    appendSheetRowsSchema,
+    createSpreadsheetSchema,
+    listEmailsSchema,
+    readEmailSchema,
+    sendEmailSchema
 ];
 
 /**
