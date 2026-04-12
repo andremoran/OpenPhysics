@@ -1,8 +1,19 @@
 # ⚛️ OpenPhysics
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/andremoran/OpenPhysics)
+
 **AI Agent for Physics Research** — Telegram Bot powered by GPD (Get Physics Done) methodology.
 
 Inspired by [get-physics-done](https://github.com/psi-oss/get-physics-done) by Physical Superintelligence PBC (PSI).
+
+## ⚛️ Overview
+OpenPhysics is an autonomous AI agent designed for advanced physics research. It implements the **Scope → Plan → Derive → Verify → Package** methodology from the "Get Physics Done" (GPD) framework.
+
+### 🛠 Physical Capabilities
+- **arXiv Research**: Deep search and metadata extraction from physical science papers.
+- **Physical Computation**: Specialized toolset for CODATA constants, unit conversions, and complex mathematical expressions using `mathjs`.
+- **Wolfram Alpha Integration**: Access to extensive computational knowledge for verification.
+- **Agentic Loop**: Multi-stage reasoning to solve physical problems, from derivation to validation.
 
 ## 🧬 Architecture
 
