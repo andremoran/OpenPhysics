@@ -3,6 +3,8 @@ import { searchArxiv, searchArxivSchema, getArxivPaper, getArxivPaperSchema } fr
 import { getPhysicsConstant, getPhysicsConstantSchema, evaluateExpression, evaluateExpressionSchema, convertUnits, convertUnitsSchema } from './physicsTools.ts';
 import { queryWolfram, queryWolframSchema, queryWolframFull, queryWolframFullSchema } from './wolframTools.ts';
 import { getModelPerformance, getModelPerformanceSchema } from './monitoringTools.ts';
+import { searchWeb, searchWebSchema, fetchWebPage, fetchWebPageSchema } from './webSearchTools.ts';
+import { generateLatexDocument, generateLatexDocumentSchema, exportGoogleDocAsPdf, exportGoogleDocAsPdfSchema } from './latexTools.ts';
 
 // Google Workspace Tools
 import { 
@@ -55,6 +57,14 @@ export const toolsRegistry: Record<string, (args: any, userId: number) => Promis
     // Monitoring
     get_model_stats: async (args: any) => getModelPerformance(args.days),
 
+    // Web Search
+    search_web: searchWeb,
+    fetch_web_page: fetchWebPage,
+
+    // LaTeX / PDF
+    generate_latex_document: generateLatexDocument,
+    export_google_doc_as_pdf: exportGoogleDocAsPdf,
+
     // Google Docs
     create_google_doc: createGoogleDoc,
     append_to_google_doc: appendToGoogleDoc,
@@ -96,7 +106,15 @@ export const toolsSchemas: any[] = [
     queryWolframFullSchema,
     // Monitoring
     getModelPerformanceSchema,
-    
+
+    // Web Search
+    searchWebSchema,
+    fetchWebPageSchema,
+
+    // LaTeX / PDF
+    generateLatexDocumentSchema,
+    exportGoogleDocAsPdfSchema,
+
     // Google Workspace
     createGoogleDocSchema,
     appendToGoogleDocSchema,
