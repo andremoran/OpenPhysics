@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroBiomed - Biomecánica con IA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --accent: #06b6d4;
+            --bg-dark: #030712;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+            background: url('hero_landing_electrobiomed_1778628316659.png') no-repeat center center/cover;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(3, 7, 18, 0.4), var(--bg-dark));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(14, 165, 233, 0.4);
+        }
+
+        /* Lead Magnet Section */
+        .lead-magnet {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 60px;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .lm-image {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .lm-image img {
+            width: 100%;
+            display: block;
+        }
+
+        .lm-content {
+            flex: 1.5;
+            min-width: 300px;
+        }
+
+        .lm-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .lm-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            flex: 1;
+            padding: 15px 25px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 20px;
+            background: radial-gradient(circle at center, rgba(14, 165, 233, 0.05), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .price-card.featured {
+            border: 2px solid var(--primary);
+            background: rgba(14, 165, 233, 0.08);
+            transform: scale(1.05);
+        }
+
+        .price-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 40px;
+            text-align: left;
+            flex-grow: 1;
+        }
+
+        .price-features li {
+            margin-bottom: 15px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Biomechanical Analysis Unique Section */
+        .unique-service {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .unique-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--primary);
+            border-radius: 32px;
+            padding: 50px;
+        }
+
+        .unique-card h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .unique-price {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        footer {
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .glass-card { padding: 30px; gap: 30px; }
+            .hero h1 { font-size: 3rem; }
+            .form-group { flex-direction: column; }
+            .price-card.featured { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <header style="position: absolute; top: 0; left: 0; right: 0; z-index: 100; padding: 30px 50px; display: flex; justify-content: space-between; align-items: center;">
+        <img src="logo.png" alt="ElectroBiomed" style="height: 50px;">
+        <a href="#pricing" class="btn btn-primary" style="padding: 10px 25px;">Planes</a>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>El Futuro de la Biomecánica es hoy</h1>
+            <p>Análisis de movimiento con Inteligencia Artificial diseñado para transformar tu práctica clínica y deportiva.</p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <a href="#pricing" class="btn btn-primary">Ver Planes Suscripción</a>
+                <a href="#lead-magnet" class="btn" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);">Descargar Guía Gratis</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="lead-magnet" class="lead-magnet">
+        <div class="glass-card">
+            <div class="lm-image">
+                <img src="lead_magnet_cover_1778627180324.png" alt="7 Errores Biomecánicos">
+            </div>
+            <div class="lm-content">
+                <h2>Guía Gratuita: 7 Errores que sabotean tus resultados</h2>
+                <p>Descubre los puntos ciegos invisibles al ojo humano y cómo la IA puede ayudarte a evitar recaídas en tus pacientes.</p>
+                <form onsubmit="event.preventDefault(); alert('¡Gracias! Redirigiendo a la descarga...'); window.open('7_Errores_Biomecanicos_ElectroBiomed.pdf');">
+                    <div class="form-group">
+                        <input type="email" placeholder="Tu mejor email..." required>
+                        <button type="submit" class="btn btn-primary">Obtener Guía PDF</button>
+                    </div>
+                    <small style="color: var(--text-muted);">Privacidad garantizada. Odiamos el spam tanto como tú.</small>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="section-header">
+            <h2>Planes Profesionales</h2>
+            <p>Elige el nivel de potencia que tu clínica necesita</p>
+        </div>
+        <div class="pricing-grid">
+            <!-- Básico -->
+            <div class="price-card">
+                <h3>Básico Usuarios</h3>
+                <div class="price">$10.50<span>/mes</span></div>
+                <ul class="price-features">
+                    <li>Análisis 2D con IA</li>
+                    <li>Antropometría básica</li>
+                    <li>Gestión de pacientes</li>
+                    <li>Reportes en PDF</li>
+                </ul>
+                <a href="https://pay.hotmart.com/X103515563J?off=gka971vg" target="_blank" class="btn" style="border: 1px solid var(--primary); color: var(--primary);">Suscribirse</a>
+            </div>
+
+            <!-- Profesional -->
+            <div class="price-card featured">
+                <div style="background: var(--primary); color: white; font-size: 0.7rem; font-weight: 900; padding: 4px 12px; border-radius: 100px; display: inline-block; margin: -55px auto 20px; text-transform: uppercase;">Más Popular</div>
+                <h3>Profesional</h3>
+                <div class="price">$19.50<span>/mes</span></div>
+                <ul class="price-features">
+                    <li>Todo lo del Básico</li>
+                    <li>Análisis 3D Avanzado</li>
+                    <li>Soporte Prioritario</li>
+                    <li>Módulo de Somatotipo</li>
+                    <li>Telerrehabilitación</li>
+                </ul>
+                <a href="https://pay.hotmart.com/X103515563J?off=827k1ska" target="_blank" class="btn btn-primary">Suscribirse Ahora</a>
+            </div>
+
+            <!-- Elite -->
+            <div class="price-card">
+                <h3>Elite Centros</h3>
+                <div class="price">$110.50<span>/mes</span></div>
+                <ul class="price-features">
+                    <li>Todo lo del Profesional</li>
+                    <li>Multi-especialista</li>
+                    <li>API de Integración</li>
+                    <li>Análisis EMG (Hardware req)</li>
+                    <li>Marca Blanca</li>
+                </ul>
+                <a href="https://pay.hotmart.com/X103515563J?off=xoviseu6" target="_blank" class="btn" style="border: 1px solid var(--primary); color: var(--primary);">Suscribirse</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="unique-service">
+        <div class="unique-card">
+            <h2>¿Solo necesitas un análisis puntual?</h2>
+            <p>Análisis Biomecánico Profesional con IA — Informe Completo</p>
+            <div class="unique-price">$58.50</div>
+            <p style="margin-bottom: 30px; color: var(--text-muted);">Sin suscripciones. Pago único por informe detallado.</p>
+            <a href="https://pay.hotmart.com/W105805264E" target="_blank" class="btn btn-primary" style="background: var(--accent);">Comprar Análisis Único</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 ElectroBiomed · Tecnología Biomecánica con IA</p>
+        <p style="font-size: 0.8rem; margin-top: 10px;">Impulsado por OpenGravity</p>
+    </footer>
+
+</body>
+</html>

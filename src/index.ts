@@ -3,6 +3,11 @@ import { bot } from './bot/telegram.ts';
 import { getOAuth2Client, saveToken } from './config/googleAuth.ts';
 import { env } from './config/env.ts';
 import './memory/firebase.ts'; // Initialize DB connection
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 console.log("-----------------------------------------");
 console.log("⚛️  Starting OpenPhysics Agent...");
@@ -31,6 +36,9 @@ const PORT = process.env.PORT || 3000;
 app.get('/', (req, res) => {
     res.send('⚛️ OpenPhysics is alive and running! Powered by GPD methodology.');
 });
+
+// Serve marketing launch files
+app.use('/lanzamiento', express.static(path.join(__dirname, '../../public')));
 
 app.get('/oauth2callback', async (req, res) => {
     const code = req.query.code as string;
