@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroBiomed | Ecosistema Biomecánico con IA</title>
+    <meta name="description" content="Eleva la precisión de tus diagnósticos. Herramientas avanzadas de análisis biomecánico, electromiografía y telerrehabilitación con Inteligencia Artificial.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0f18;
+            --bg-card: rgba(18, 26, 47, 0.6);
+            --primary-accent: #00e5ff;
+            --secondary-accent: #3b82f6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Abstract Background Effects */
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0,229,255,0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -200px;
+            left: -200px;
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .bg-glow-2 {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(0,0,0,0) 70%);
+            bottom: -100px;
+            right: -100px;
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        header {
+            padding: 6rem 0 4rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+        }
+
+        .cta-primary {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--secondary-accent), var(--primary-accent));
+            color: #fff;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 229, 255, 0.2);
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 25px rgba(0, 229, 255, 0.3);
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .price-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-accent);
+        }
+
+        .price-card.popular::before {
+            content: 'MÁS ELEGIDO';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-accent);
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 0.4rem 1.5rem;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            letter-spacing: 1px;
+        }
+
+        .tier-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            margin-left: 0.5rem;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 2.5rem;
+            flex-grow: 1;
+        }
+
+        .features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            color: var(--text-muted);
+        }
+
+        .features li::before {
+            content: '✓';
+            color: var(--primary-accent);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .cta-card {
+            text-align: center;
+            display: block;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .price-card.popular .cta-card {
+            background: var(--primary-accent);
+            color: #000;
+            border: none;
+        }
+
+        .cta-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .price-card.popular .cta-card:hover {
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 229, 255, 0.4);
+        }
+
+        /* Trust Section */
+        .trust-section {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+        
+        .guarantee-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: rgba(0, 229, 255, 0.05);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+        }
+
+        .guarantee-text h4 {
+            color: var(--primary-accent);
+            font-size: 1.2rem;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 4rem 0 2rem; }
+            h1 { font-size: 2.2rem; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <header class="animate">
+            <h1>El Ecosistema Clínico del Futuro. Hoy.</h1>
+            <p class="hero-subtitle">Mide lo invisible. Convierte datos biomecánicos en resultados clínicos excepcionales y fideliza a tus pacientes con reportes impulsados por Inteligencia Artificial.</p>
+            <a href="#planes" class="cta-primary">Ver Planes Disponibles</a>
+        </header>
+
+        <section id="planes" class="pricing-section animate" style="animation-delay: 0.2s;">
+            <h2 class="section-title">Elige la precisión que tu consulta necesita</h2>
+            
+            <div class="pricing-grid">
+                
+                <!-- Básico Usuarios -->
+                <div class="price-card">
+                    <h3 class="tier-name">Básico Usuarios</h3>
+                    <div class="price">$10.99 <span>/ mes</span></div>
+                    <ul class="features">
+                        <li>Evaluación Inicial Simplificada</li>
+                        <li>Acceso a módulos de educación</li>
+                        <li>Reportes PDF básicos</li>
+                        <li>Soporte vía email</li>
+                    </ul>
+                    <!-- Sustituir href con el Link de Checkout de Hotmart -->
+                    <a href="#hotmart-link-1" class="cta-card">Comenzar Ahora</a>
+                </div>
+
+                <!-- Básico Profesionales -->
+                <div class="price-card popular">
+                    <h3 class="tier-name">Básico Profesionales</h3>
+                    <div class="price">$19.90 <span>/ mes</span></div>
+                    <ul class="features">
+                        <li>Análisis Biomecánico 2D con IA</li>
+                        <li>Gestión integral de pacientes</li>
+                        <li>Análisis de Somatotipo</li>
+                        <li>Reportes clínicos exportables</li>
+                        <li>Acceso prioritario a soporte</li>
+                    </ul>
+                    <a href="#hotmart-link-2" class="cta-card">Plan Recomendado</a>
+                </div>
+
+                <!-- Básico Centros -->
+                <div class="price-card">
+                    <h3 class="tier-name">Básico Centros</h3>
+                    <div class="price">$111.00 <span>/ mes</span></div>
+                    <ul class="features">
+                        <li>Multi-usuario (Gestión de Profesionales)</li>
+                        <li>Todo lo del plan Profesionales</li>
+                        <li>Métricas organizacionales</li>
+                        <li>Integración API básica</li>
+                        <li>Onboarding personalizado</li>
+                    </ul>
+                    <a href="#hotmart-link-3" class="cta-card">Potenciar mi Centro</a>
+                </div>
+
+                <!-- Análisis Individual -->
+                <div class="price-card">
+                    <h3 class="tier-name">Análisis Biomecánico</h3>
+                    <div class="price">$59.00 <span>/ pago único</span></div>
+                    <ul class="features">
+                        <li>1 Análisis Biomecánico Completo</li>
+                        <li>Procesamiento por Inteligencia Artificial</li>
+                        <li>Detección de compensaciones</li>
+                        <li>Entrega en menos de 72 horas</li>
+                    </ul>
+                    <a href="#hotmart-link-4" class="cta-card">Solicitar Análisis</a>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="trust-section animate" style="animation-delay: 0.4s;">
+            <div class="guarantee-badge">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--primary-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <div class="guarantee-text">
+                    <h4>Garantía Incondicional de 7 Días</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Prueba la plataforma sin riesgo. Procesado de forma segura por Hotmart.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
